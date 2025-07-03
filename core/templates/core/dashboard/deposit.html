@@ -1,0 +1,116 @@
+{% extends "core/dashboard/base.html" %}
+{% block title %}Make a Deposit{% endblock %}
+
+{% block content %}
+  <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Hi {{request.user.first_name}} {{request.user.last_name}},</h4>
+                            <p class="mb-0">You are about to make a deposit</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url "dashboard" %}">Dashboard</a></li>
+                            <li class="breadcrumb-item active"><a href="{% url "user_deposit" %}">Deposit</a></li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h3 class="text-center mb-4">Make a Deposit</h3>
+
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+          <label for="id_amount">Amount</label>
+          {{ form.amount }}
+          {% if form.amount.errors %}
+            <div class="text-danger">{{ form.amount.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="id_method">Select Deposit Method  </label>
+          {{ form.method }}
+          {% if form.method.errors %}
+            <div class="text-danger">{{ form.method.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Wallet address display & copy -->
+        <div class="form-group" id="wallet-address-container" style="display:none;">
+          <p class="mb-2 font-italic text-info">Copy the wallet address and proceed to make payment.</p>
+          <label>Wallet Address</label>
+          <div class="input-group">
+            <input type="text" readonly id="wallet-address" class="form-control" value="">
+            <div class="input-group-append">
+              <button type="button" class="btn btn-outline-secondary" id="copy-btn">Copy</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="id_payment_proof">Upload Payment Proof</label>
+          {{ form.payment_proof }}
+          {% if form.payment_proof.errors %}
+            <div class="text-danger">{{ form.payment_proof.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Submit Deposit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Map of method IDs to wallet addresses
+  const depositMethods = {
+    {% for method in form.fields.method.queryset %}
+      "{{ method.pk }}": "{{ method.wallet_address }}",
+    {% endfor %}
+  };
+
+  const methodSelect = document.getElementById("id_method");
+  const walletContainer = document.getElementById("wallet-address-container");
+  const walletInput = document.getElementById("wallet-address");
+  const copyBtn = document.getElementById("copy-btn");
+
+  function updateWalletAddress() {
+    const selectedId = methodSelect.value;
+    if (selectedId && depositMethods[selectedId]) {
+      walletInput.value = depositMethods[selectedId];
+      walletContainer.style.display = "block";
+    } else {
+      walletInput.value = "";
+      walletContainer.style.display = "none";
+    }
+  }
+
+  methodSelect.addEventListener("change", updateWalletAddress);
+
+  copyBtn.addEventListener("click", () => {
+    walletInput.select();
+    walletInput.setSelectionRange(0, 99999); // For mobile devices
+    document.execCommand("copy");
+
+    copyBtn.textContent = "Copied!";
+    setTimeout(() => copyBtn.textContent = "Copy", 2000);
+  });
+
+  // Initialize on page load
+  updateWalletAddress();
+</script>
+
+
+
+{% endblock %}

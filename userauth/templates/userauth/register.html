@@ -1,0 +1,88 @@
+{% extends "userauth/base.html" %}
+
+{% block title %}Register{% endblock title %}
+{% block content %}
+
+<div class="authincation h-100">
+    <div class="container-fluid h-100">
+        <div class="row justify-content-center h-100 align-items-center">
+            <div class="col-md-6">
+                <div class="authincation-content">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <center>
+                                <h4 style="color: {% if message.tags == 'error' %}firebrick{% else %}dodgerblue{% endif %};">
+                                    {{ message }}
+                                </h4>
+                            </center>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="row no-gutters">
+                        <div class="col-xl-12">
+                            <div class="auth-form">
+                                <h4 class="text-center mb-4">Sign up your account</h4>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label><strong>First Name</strong></label>
+                                        <input type="text" class="form-control" placeholder="First Name"
+                                            name="first_name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>Last Name</strong></label>
+                                        <input type="text" class="form-control" placeholder="Last Name" name="last_name"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>Username</strong></label>
+                                        <input type="text" class="form-control" placeholder="Username" name="username"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>Email</strong></label>
+                                        <input type="email" class="form-control" placeholder="hello@example.com"
+                                            name="email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>Phone</strong></label>
+                                        <input type="text" class="form-control" placeholder="Phone Number" name="phone"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>Country</strong></label>
+                                        <select name="country" class="form-control" required>
+                                            <option value="">Select your country</option>
+                                            {% for code, name in countries %}
+                                                <option value="{{ code }}">{{ name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>Password</strong></label>
+                                        <input type="password" class="form-control" placeholder="Password"
+                                            name="password1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>Confirm Password</strong></label>
+                                        <input type="password" class="form-control" placeholder="Confirm Password"
+                                            name="password2" required>
+                                    </div>
+                                    <div class="text-center mt-4">
+                                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                                    </div>
+                                </form>
+
+                                <div class="new-account mt-3">
+                                    <p>Already have an account? <a class="text-primary" href="{% url 'login' %}">Sign
+                                            in</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

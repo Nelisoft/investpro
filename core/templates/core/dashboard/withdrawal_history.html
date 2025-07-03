@@ -1,0 +1,77 @@
+{% extends "core/dashboard/base.html" %}
+{% block title %}Withdrawal History{% endblock %}
+
+{% block content %}
+ <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Withdrawal History</h4>
+                            
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url "dashboard" %}">Dashboard</a></li>
+                            <li class="breadcrumb-item active"><a href="{% url "withdrawal_history" %}">withdrawal history</a></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="row">
+                   
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                  
+                                    <table class="table table-hover table-bordered">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Amount</th>
+        <th scope="col">Method</th>
+        <th scope="col">Wallet Address</th>
+        <th scope="col">Status</th>
+        <th scope="col">Requested At</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for withdrawal in withdrawals %}
+        <tr style="color:black;">
+          <td >${{ withdrawal.amount }}</td>
+          <td>{{ withdrawal.method.coin_name }} ({{ withdrawal.method.network }})</td>
+          <td>{{ withdrawal.user_wallet_address }}</td>
+          <td>
+            {% if withdrawal.status == 'Pending' %}
+              <span class="badge badge-warning">Pending</span>
+            {% elif withdrawal.status == 'Approved' %}
+              <span class="badge badge-success">Approved</span>
+            {% elif withdrawal.status == 'Rejected' %}
+              <span class="badge badge-danger">Rejected</span>
+            {% else %}
+              <span class="badge badge-secondary">{{ withdrawal.status }}</span>
+            {% endif %}
+          </td>
+          <td>{{ withdrawal.requested_at|date:"Y-m-d H:i" }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5" class="text-center">No withdrawals yet.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock content %}
+

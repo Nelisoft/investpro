@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Withdrawal Request Confirmation</title>
+</head>
+<body>
+  <h2>Hello {{ user.first_name }} {{ user.last_name }},</h2>
+  <p>We have received your withdrawal request on HYIP Investment Platform. Here are the details:</p>
+
+  <ul>
+    <li><strong>Amount:</strong> {{ withdrawal.amount }}</li>
+    <li><strong>Coin:</strong> {{ withdrawal.method.coin_name }}</li>
+    <li><strong>Wallet Address:</strong> {{ withdrawal.user_wallet_address }}</li>
+  </ul>
+
+  <p>We will process your withdrawal a s soon as possible. Thank you for choosing our platform!</p>
+
+  <p>Best regards,<br>HYIP Investment Team</p>
+</body> 
+</html>

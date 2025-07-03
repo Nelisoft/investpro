@@ -1,0 +1,171 @@
+{% extends "core/dashboard/base.html" %}
+    {% block content %}
+    
+       
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Hi {{request.user.first_name}} {{request.user.last_name}}, welcome back!</h4>
+                            <p class="mb-0">Your Investment Dashboard</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url "dashboard" %}">Dashboard</a></li>
+                            <li class="breadcrumb-item active"><a href="{% url "dashboard" %}">Home</a></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card">
+                            <div class="stat-widget-one card-body">
+                                <div class="stat-icon d-inline-block">
+                                    <i class="ti-money text-success border-success"></i>
+                                </div>
+                                <div class="stat-content d-inline-block">
+                                    <div class="stat-text">Current alance</div>
+                                    <div class="stat-digit">{{balance}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card">
+                            <div class="stat-widget-one card-body">
+                                <div class="stat-icon d-inline-block">
+                                    <i class="ti-user text-primary border-primary"></i>
+                                </div>
+                                <div class="stat-content d-inline-block">
+                                    <div class="stat-text">Customer</div>
+                                    <div class="stat-digit">961</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card">
+                            <div class="stat-widget-one card-body">
+                                <div class="stat-icon d-inline-block">
+                                    <i class="ti-layout-grid2 text-pink border-pink"></i>
+                                </div>
+                                <div class="stat-content d-inline-block">
+                                    <div class="stat-text">Projects</div>
+                                    <div class="stat-digit">770</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card">
+                            <div class="stat-widget-one card-body">
+                                <div class="stat-icon d-inline-block">
+                                    <i class="ti-link text-danger border-danger"></i>
+                                </div>
+                                <div class="stat-content d-inline-block">
+                                    <div class="stat-text">Referral</div>
+                                    <div class="stat-digit">2,781</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  
+                   
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Fee Collections and Expenses</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="ct-bar-chart mt-5"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="ct-pie-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           
+                <div class="row">
+                   
+                   <div class="col-lg-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Recent Transactions </h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table student-data-table m-t-20" style="color:black;">
+                    <thead>
+                        <tr class='bg-dark text-light'>
+                            <th>Transaction Type</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Method</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tx in transactions %}
+                        <tr>
+                            <td>{{ tx.type }}</td>
+                            <td>${{ tx.amount }}</td>
+                            <td>
+                                {% if tx.status == 'Pending' %}
+                                    <span class="badge badge-warning">Pending</span>
+                                {% elif tx.status == 'Approved' %}
+                                    <span class="badge badge-primary">Approved</span>
+                                {% elif tx.status == 'Rejected' %}
+                                    <span class="badge badge-danger">Rejected</span>
+                                {% else %}
+                                    <span class="badge badge-secondary">{{ tx.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if tx.type == 'Deposit' %}
+                                    {{ tx.coin }}
+                                    
+                                    
+                                {% else %}
+                                  {{ tx.coin }}
+                                   
+                                    
+                                {% endif %}
+                            </td>
+                            <td>{{ tx.date|date:"Y-m-d H:i" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No transactions found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+    {% endblock content %}

@@ -1,0 +1,61 @@
+{% extends "core/dashboard/base.html" %}
+{% block title %}Make a withdrawal{% endblock %}
+
+{% block content %}
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row page-titles mx-0">
+      <div class="col-sm-6 p-md-0">
+        <div class="welcome-text">
+          <h4>Hi {{ request.user.first_name }} {{ request.user.last_name }},</h4>
+          <p class="mb-0">You are about to make a Withdrawal</p>
+          <p>Your current balance: <strong>${{ balance }}</strong></p>
+        </div>
+      </div>
+      <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+          <li class="breadcrumb-item active"><a href="#">Withdrawal</a></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <h3 class="text-center mb-4">Make a withdrawal</h3>
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+
+          <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+              <label for="id_amount">Amount</label>
+              <input type="number" name="amount" step="any" class="form-control" id="id_amount" required>
+            </div>
+
+            <div class="form-group">
+              <label for="id_method">Select Coin & Method</label>
+              <select name="method" id="id_method" class="form-control" required>
+                <option value="">-- Select Withdraw Method --</option>
+                {% for method in methods %}
+                  <option value="{{ method.id }}">{{ method.coin_name }} ({{ method.network }})</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="id_user_wallet_address">Your Wallet Address</label>
+              <input type="text" name="user_wallet_address" class="form-control" id="id_user_wallet_address" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Request Withdrawal</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

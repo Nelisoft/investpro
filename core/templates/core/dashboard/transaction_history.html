@@ -1,0 +1,89 @@
+{% extends "core/dashboard/base.html" %}
+{% block title %}Transaction History{% endblock %}
+
+{% block content %}
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row page-titles mx-0">
+      <div class="col-sm-6 p-md-0">
+        <div class="welcome-text">
+          <h4>Transaction History</h4>
+        </div>
+      </div>
+      <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+          <li class="breadcrumb-item active"><a href="{% url 'transaction_history' %}">transaction history</a></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover table-bordered">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Coin</th>
+                    <th>Network</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Proof / Wallet</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for tx in transactions %}
+                    <tr style="color:black;">
+                      <td>
+                        {% if tx.transaction_type == 'deposit' %}
+                          <span class="badge bg-info text-dark">Deposit</span>
+                        {% else %}
+                          <span class="badge bg-primary">Withdrawal</span>
+                        {% endif %}
+                      </td>
+                      <td>${{ tx.amount }}</td>
+                      <td>{{ tx.coin }}</td>
+                      <td>{{ tx.network }}</td>
+                      <td>
+                        {% if tx.status == 'Pending' %}
+                          <span class="badge bg-warning text-dark">Pending</span>
+                        {% elif tx.status == 'Approved' %}
+                          <span class="badge bg-success">Approved</span>
+                        {% elif tx.status == 'Rejected' %}
+                          <span class="badge bg-danger">Rejected</span>
+                        {% else %}
+                          <span class="badge bg-secondary">{{ tx.status }}</span>
+                        {% endif %}
+                      </td>
+                      <td>{{ tx.date|date:"Y-m-d H:i" }}</td>
+                      <td>
+                        {% if tx.transaction_type == 'deposit' %}
+                          {% if tx.proof %}
+                            <a href="{{ tx.proof.url }}" target="_blank" class="btn btn-sm btn-outline-info">View</a>
+                          {% else %}
+                            <span class="text-muted">N/A</span>
+                          {% endif %}
+                        {% else %}
+                          {{ tx.wallet }}
+                        {% endif %}
+                      </td>
+                    </tr>
+                  {% empty %}
+                    <tr>
+                      <td colspan="7" class="text-center">No transactions found.</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Deposit Confirmation</title>
+</head>
+<body>
+  <h2>Hello {{ request.user.first_name }} {{request.user.last_name}},</h2>
+  <p>We have confirmed on HYIP Investment Platform. Here are the details:</p>
+
+  <ul>
+    <li><strong>Amount:</strong> ${{ deposit.amount }}</li>
+    <li><strong>Coin:</strong> {{ deposit.method.coin }}</li>
+    
+  </ul>
+
+  <p>And your account have been Updated. Thank you for choosing our platform!</p>
+
+  <p>Best regards,<br>HYIP Investment Team</p>
+</body>
+</html>
